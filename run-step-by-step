@@ -1,3 +1,7 @@
+--login to ycql
+./master/bin/ycqlsh `hostname -i`  -u 'cassandra'
+password: Yugabyte12#
+
 ssh -i "kp-CANNON-aws.pem" centos@44.214.44.45
 cd /home/centos/spark-3.4.1-bin-hadoop3
 ./bin/spark-shell --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtension --packages com.yugabyte.spark:spark-cassandra-connector_2.12:3.0-yb-8
