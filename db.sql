@@ -1,3 +1,8 @@
+--login to ycql
+./master/bin/ycqlsh `hostname -i`  -u 'cassandra'
+password: Yugabyte12#
+
+    > use test;
 
 create table aws_cloudtrail(event_id INT, event_content JSONB, PRIMARY KEY (event_id));
 
