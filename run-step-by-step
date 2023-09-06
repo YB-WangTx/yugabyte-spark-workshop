@@ -36,7 +36,7 @@ val spark = SparkSession
       .builder()
       .config(conf)
       .config("spark.cassandra.connection.host", host)
-      .config("spark.cassandra.connection.port", "9042"
+      .config("spark.cassandra.connection.port", "9042")
       .config("spark.cassandra.auth.username", user)
       .config("spark.cassandra.auth.password", password)
       .withExtensions(new CassandraSparkExtensions)
