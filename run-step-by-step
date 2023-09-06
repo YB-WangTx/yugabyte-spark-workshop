@@ -1,3 +1,11 @@
+--POC cannon
+ssh -i "kp-CANNON-aws.pem" centos@50.16.67.143
+
+--Universe: alan-panw-audit-demo
+./master/bin/ycqlsh `hostname -i`  -u 'cassandra'
+password: Panwaudit2023!
+
+--Universe: wwang-testing
 --login to ycql
 ./master/bin/ycqlsh `hostname -i`  -u 'cassandra'
 password: Yugabyte12#
