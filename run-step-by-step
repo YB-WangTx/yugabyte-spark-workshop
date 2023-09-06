@@ -7,6 +7,9 @@ sudo ssh -i /opt/yugabyte/yugaware/data/keys/3315aeea-aa87-43af-9c38-f72c20b9d8c
 SSL_CERTFILE=~/yugabyte-client-tls-config/ca.crt ./master/bin/ycqlsh  10.36.1.8 9042  -u 'cassandra' --ssl
 password: Panwaudit2023!
 
+keyspace: panw_test
+table: panw_audit_trail_demo
+
 --Universe: wwang-testing
 --login to ycql
 ./master/bin/ycqlsh `hostname -i`  -u 'cassandra'
