@@ -94,3 +94,13 @@ df_sel2.show()
 df_sel2.explain
 println("Json processing successful")
   }
+
+--time function
+spark.sql("""
+SELECT current_timestamp() as ts,
+current_timezone() as tz,
+current_date() as date,
+TIMESTAMP 'yesterday' as yesterday,
+TIMESTAMP 'today' as today,
+TIMESTAMP 'tomorrow' as tomorrow
+""").show(6,0,true)
