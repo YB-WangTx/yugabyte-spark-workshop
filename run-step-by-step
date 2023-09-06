@@ -17,9 +17,9 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.expressions.Window
 import com.datastax.spark.connector.cql.CassandraConnector
 
-val host = "748fdee2-aabe-4d75-a698-a6514e0b19ff.aws.ybdb.io"
+val host = "10.37.1.250"
 val keyspace = "test"
-val table = "employees_json"
+val table = "employees_json_index"
 val user = "cassandra"
 val password = "Yugabyte12#"
 
@@ -27,7 +27,7 @@ val conf = new SparkConf()
     .setAppName("yb.spark-jsonb")
     .setMaster("local[1]")
     .set("spark.cassandra.connection.localDC", "us-east-1")
-    .set("spark.cassandra.connection.host", "10.37.1.174")
+    .set("spark.cassandra.connection.host", host)
     .set("spark.sql.catalog.ybcatalog", "com.datastax.spark.connector.datasource.CassandraCatalog")
     .set("spark.sql.extensions", "com.datastax.spark.connector.CassandraSparkExtensions")
 
