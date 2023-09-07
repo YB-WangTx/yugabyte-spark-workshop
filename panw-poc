@@ -16,7 +16,9 @@ table: panw_audit_trail_demo
 ssh -i "kp-CANNON-aws.pem" centos@44.214.44.45
 
 --Create a keystore to access ssl enabled YCQL
-keytool -keystore yb-keystore.jks -storetype 'jks' -importcert -file ~/yugabyte-client-tls-config/ca.crt -keypass 'ybcloud' 
+scp -i "kp-CANNON-aws.pem" ~/Downloads/alan.crt centos@44.214.44.45:spark3yb/root.crt
+
+keytool -keystore yb-keystore.jks -storetype 'jks' -importcert -file ~/spark3yb/root.crt -keypass 'ybcloud' 
        -storepass 'ybcloud' -alias ~/home/centos/spark3yb/root_crt  -noprompt
 
 --start Spark
