@@ -36,6 +36,18 @@ val conf = new SparkConf()
     .set("spark.sql.extensions", "com.datastax.spark.connector.CassandraSparkExtensions")
 
 //Spark session
+val spark = SparkSession
+    .builder()
+    .config(conf)
+    .config("spark.cassandra.connection.host", host)
+    .config("spark.cassandra.connection.port", "9042")
+    .config("spark.cassandra.auth.username", user)
+    .config("spark.cassandra.auth.password", password)
+    .withExtensions(new CassandraSparkExtensions)
+    .getOrCreate()
+
+
+--in one line
 val spark = SparkSession.builder().config(conf).config("spark.cassandra.connection.host", host).config("spark.cassandra.connection.port", "9042").config("spark.cassandra.auth.username", user).config("spark.cassandra.auth.password", password).withExtensions(new CassandraSparkExtensions).getOrCreate()
 
 //List namespace
