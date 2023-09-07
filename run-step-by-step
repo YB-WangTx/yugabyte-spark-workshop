@@ -1,15 +1,6 @@
 --POC cannon
 ssh -i "kp-CANNON-aws.pem" centos@50.16.67.143
 
---Universe: alan-panw-audit-demo
-sudo ssh -i /opt/yugabyte/yugaware/data/keys/3315aeea-aa87-43af-9c38-f72c20b9d8c0/yb-demo-aws-poc-selective_3315aeea-aa87-43af-9c38-f72c20b9d8c0-key.pem -ostricthostkeychecking=no -p 22 yugabyte@10.36.1.8
-
-SSL_CERTFILE=~/yugabyte-client-tls-config/ca.crt ./master/bin/ycqlsh  10.36.1.8 9042  -u 'cassandra' --ssl
-password: Panwaudit2023!
-
-keyspace: panw_test
-table: panw_audit_trail_demo
-
 --Universe: wwang-testing
 --login to ycql
 ./master/bin/ycqlsh `hostname -i`  -u 'cassandra'
@@ -30,7 +21,7 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.expressions.Window
 import com.datastax.spark.connector.cql.CassandraConnector
 
-val host = "10.37.1.250"
+val host = "10.37.1.174"
 val keyspace = "test"
 val table = "employees_json_index"
 val user = "cassandra"
@@ -45,15 +36,7 @@ val conf = new SparkConf()
     .set("spark.sql.extensions", "com.datastax.spark.connector.CassandraSparkExtensions")
 
 //Spark session
-val spark = SparkSession
-      .builder()
-      .config(conf)
-      .config("spark.cassandra.connection.host", host)
-      .config("spark.cassandra.connection.port", "9042")
-      .config("spark.cassandra.auth.username", user)
-      .config("spark.cassandra.auth.password", password)
-      .withExtensions(new CassandraSparkExtensions)
-      .getOrCreate()
+val spark = SparkSession.builder().config(conf).config("spark.cassandra.connection.host", host).config("spark.cassandra.connection.port", "9042").config("spark.cassandra.auth.username", user).config("spark.cassandra.auth.password", password).withExtensions(new CassandraSparkExtensions).getOrCreate()
 
 //List namespace
 spark.sql("SHOW NAMESPACES FROM ybcatalog").show
