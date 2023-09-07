@@ -44,7 +44,7 @@ val keyspace = "panw_test"
 val table = "panw_audit_trail_demo"
 val user = "cassandra"
 val password = "Panwaudit2023!"
-val keyStore ="~/spark3yb/yb-keystore.jks"
+val keyStore ="/home/centos/spark3yb/yb-keystore.jks"
 
 val conf = new SparkConf()
     .setAppName("yb.spark-jsonb")
@@ -70,9 +70,8 @@ val conf = new SparkConf()
              .withExtensions(new CassandraSparkExtensions)
              .getOrCreate()
 
---without ssl
 //Spark session
-val spark = SparkSession.builder().config(conf).config("spark.cassandra.connection.host", host).config("spark.cassandra.connection.port", "9042").config("spark.cassandra.auth.username", user).config("spark.cassandra.auth.password", password).withExtensions(new CassandraSparkExtensions).getOrCreate()
+val spark = SparkSession.builder().config(conf).config("spark.cassandra.connection.host", host).config("spark.cassandra.connection.port", "9042").config("spark.cassandra.connection.ssl.clientAuth.enabled", true).config("spark.cassandra.auth.username", user).config("spark.cassandra.auth.password", password).config("spark.cassandra.connection.ssl.enabled", true).config("spark.cassandra.connection.ssl.trustStore.type", "jks").config("spark.cassandra.connection.ssl.trustStore.path", keyStore).config("spark.cassandra.connection.ssl.trustStore.password", "ybcloud").withExtensions(new CassandraSparkExtensions).getOrCreate()
 
 
 //List namespace
