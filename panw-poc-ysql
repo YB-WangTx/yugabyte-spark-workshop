@@ -54,15 +54,14 @@ object PostgresSSLConnection {
  val jdbcUsername = "yugabyte" 
  val jdbcPassword = "Panwaudit2023" 
 
-// Configure SSL properties 
+// Configure SSL properties,Use "require" for mandatory SSL 
   val sslMode = "require" 
-// Use "require" for mandatory SSL 
-  val sslRootCert = "/home/centos/spark3yb/root.crt" 
-  //"path/to/root_cert.pem" 
+  val sslRootCert = "/home/centos/spark3yb/root.crt"
   val sslClientCert = "/home/centos/spark3yb/root.crt"
+
  // val sslClientKey = "path/to/client_key.pem" 
 // Create the JDBC URL with SSL options 
-  val jdbcUrl = s"jdbc:postgresql://$jdbcHostname:$jdbcPort/$jdbcDatabase?user=$jdbcUsername&password=$jdbcPassword&sslmode=$sslMode&sslrootcert=$sslRootCert&sslcert=$sslClientCert"
+  val jdbcUrl = "jdbc:postgresql://$jdbcHostname:$jdbcPort/$jdbcDatabase?user=$jdbcUsername&password=$jdbcPassword&sslmode=$sslMode&sslrootcert=$sslRootCert&sslcert=$sslClientCert"
 //&sslkey=$sslClientKey" 
 // Read data from the PostgreSQL database 
 val df = spark.read.format("jdbc").option("url", jdbcUrl).option("dbtable", table).load() 
