@@ -131,3 +131,6 @@ df_sel2.show()
 df_sel2.explain
 println("Json processing successful")
   }
+
+
+https://www.projectpro.io/recipes/work-with-complex-nested-json-files-using-spark-sql
