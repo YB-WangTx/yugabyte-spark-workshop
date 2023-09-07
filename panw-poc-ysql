@@ -27,6 +27,11 @@ import org.apache.spark.sql.SaveMode
 
 
 val jdbcUrl = s"jdbc:yugabytedb://10.36.2.198:5433/yugabyte"
+val host = "10.36.2.198"
+//val keyspace = "panw_test"
+//val table = "panw_audit_trail_demo"
+val user = "yugabyte"
+val password = "Panwaudit2023!"
 
 val connectionProperties = new Properties()
     connectionProperties.put("user", s"yugabyte")
@@ -58,8 +63,8 @@ spark.table("test_copy").write.mode(SaveMode.Append).jdbc(jdbcUrl, "test", conne
 val new_test_df = spark.read.format("jdbc")
               .option("url", jdbcUrl)
               .option("dbtable", "test")
-              .option("user", "yugabyte")
-              .option("password", "yugabyte")
+              .option("user", user)
+              .option("password", password)
               .option("driver", "com.yugabyte.Driver")
               .option("load-balance", "true")
               .option("numPartitions", 5)
@@ -68,7 +73,6 @@ val new_test_df = spark.read.format("jdbc")
               .option("upperBound", 20)
               .option("pushDownPredicate", true)
               .option("pushDownAggregate", true).load
-
 
 
 } }
