@@ -48,7 +48,7 @@ object PostgresSSLConnection {
 
 // Configure PostgreSQL connection properties 
  val jdbcHostname = "10.36.2.198"
- val jdbcPort = "5432" 
+ val jdbcPort = "5433" 
  val jdbcDatabase = "yugabyte" 
  val table = "test"
  val jdbcUsername = "yugabyte" 
