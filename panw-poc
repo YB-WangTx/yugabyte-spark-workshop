@@ -21,6 +21,9 @@ scp -i "kp-CANNON-aws.pem" ~/Downloads/alan.crt centos@44.214.44.45:spark3yb/roo
 keytool -keystore yb-keystore.jks -storetype 'jks' -importcert -file ~/spark3yb/root.crt -keypass 'ybcloud' 
        -storepass 'ybcloud' -alias ~/home/centos/spark3yb/root_crt  -noprompt
 
+--verify
+keytool -list -keystore yb-keystore.jks -storepass ybcloud
+
 --start Spark
 cd /home/centos/spark-3.4.1-bin-hadoop3
 ./bin/spark-shell --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtension --packages com.yugabyte.spark:spark-cassandra-connector_2.12:3.0-yb-8
