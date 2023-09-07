@@ -85,11 +85,15 @@ df_yb.printSchema()
 df_yb.count()
 df_yb.show()
 
-val df_yb = spark
-  .read
-  .cassandraFormat("panw_audit_trail_demo", "panw_test")
-  .options(ReadConf.SplitSizeInMBParam.option(32))
-  .load()
+//val df_yb = spark.read.cassandraFormat("panw_audit_trail_demo", "panw_test").options(ReadConf.SplitSizeInMBParam.option(32)).load()
+
+ val df_yb = spark.read.table("ybcatalog.panw_test.panw_audit_trail_demo")
+// Perform SQL operations on the JSON data
+df.createOrReplaceTempView("json_data")
+val resultDF = spark.sql("SELECT * FROM json_data WHERE tenant_id ='123505328935'")
+
+resultDF.show()
+
 
 //Performing ETL : Window function
 //row_number()
