@@ -11,7 +11,6 @@ database: yugabyte
 password: Panwaudit2023!
 table: test
 
-
 --app server
 ssh -i "kp-CANNON-aws.pem" centos@44.214.44.45
 
@@ -63,7 +62,8 @@ object PostgresSSLConnection {
   val sslClientKey = "path/to/client_key.pem" 
 // Create the JDBC URL with SSL options 
   val jdbcUrl = s"jdbc:postgresql://$jdbcHostname:$jdbcPort/$jdbcDatabase?user=$jdbcUsername&password=$jdbcPassword&sslmode=$sslMode&sslrootcert=$sslRootCert&sslcert=$sslClientCert&sslkey=$sslClientKey" 
-// Read data from the PostgreSQL database val df = spark.read .format("jdbc") .option("url", jdbcUrl) .option("dbtable", table) .load() 
+// Read data from the PostgreSQL database 
+val df = spark.read .format("jdbc") .option("url", jdbcUrl) .option("dbtable", table) .load() 
 // Perform operations on the DataFrame 
 df.show() 
 // Stop the SparkSession spark.stop() 
