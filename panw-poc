@@ -70,6 +70,15 @@ val conf = new SparkConf()
              .withExtensions(new CassandraSparkExtensions)
              .getOrCreate()
 
+--without ssl
+ val spark = SparkSession.builder()
+             .config(conf)
+             .config("spark.cassandra.connection.host", host)
+             .config("spark.cassandra.connection.port", "9042")
+             .config("spark.cassandra.auth.username", user)
+             .config("spark.cassandra.auth.password", password)
+             .withExtensions(new CassandraSparkExtensions)
+             .getOrCreate()
 
 //List namespace
 spark.sql("SHOW NAMESPACES FROM ybcatalog").show
