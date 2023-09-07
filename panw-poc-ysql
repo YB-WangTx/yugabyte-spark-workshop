@@ -4,9 +4,6 @@ ssh -i "kp-CANNON-aws.pem" centos@50.16.67.143
 --Universe: alan-panw-audit-demo
 sudo ssh -i /opt/yugabyte/yugaware/data/keys/3315aeea-aa87-43af-9c38-f72c20b9d8c0/yb-demo-aws-poc-selective_3315aeea-aa87-43af-9c38-f72c20b9d8c0-key.pem -ostricthostkeychecking=no -p 22 yugabyte@10.36.1.8
 
-SSL_CERTFILE=~/yugabyte-client-tls-config/ca.crt ./master/bin/ycqlsh  10.36.1.8 9042  -u 'cassandra' --ssl
-password: Panwaudit2023!
-
 database: yugabyte
 password: Panwaudit2023!
 table: test
@@ -19,54 +16,44 @@ scp -i "kp-CANNON-aws.pem" ~/Downloads/alan.crt centos@44.214.44.45:spark3yb/roo
 
 --start Spark
 cd /home/centos/spark-3.4.1-bin-hadoop3
-./bin/spark-shell --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtension --packages com.yugabyte.spark:spark-cassandra-connector_2.12:3.0-yb-8
+./bin/spark-shell --packages com.yugabyte:jdbc-yugabytedb:42.3.0
 
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.Row
-import com.datastax.spark.connector._
-import org.apache.spark.sql.cassandra.CassandraSQLRow
-import org.apache.spark.sql.cassandra._
-import com.datastax.spark.connector.cql.CassandraConnectorConf
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.expressions.Window
-import com.datastax.spark.connector.cql.CassandraConnector
 import java.util.Properties
+import org.apache.spark.sql.SaveMode
 
 
-//val keyStore ="/home/centos/spark3yb/yb-keystore.jks"
+val jdbcUrl = s"jdbc:yugabytedb://localhost:5433/ysql_spark_shell"
 
-//val jdbc_url = "jdbc:postgresql://10.36.2.198:5433/yugabyte"
-//libraryDependencies += "org.postgresql" % "postgresql" % "your_postgresql_version"
+val connectionProperties = new Properties()
+    connectionProperties.put("user", s"yugabyte")
+    connectionProperties.put("password", s"Panwaudit2023!")
+    connectionProperties.setProperty("Driver", "com.yugabyte.Driver")
 
-object PostgresSSLConnection { 
-   def main(args: Array[String]): Unit = { 
-  // Create a SparkSession 
- val spark = SparkSession.builder() 
-     .appName("PostgresSSLConnection") 
-     .getOrCreate() 
+//
+val test_Df = spark.read.jdbc(jdbcUrl, "test", connectionProperties)
+test_Df.show()
+test_Df.printSchema()
 
-// Configure PostgreSQL connection properties 
- val jdbcHostname = "10.36.2.198"
- val jdbcPort = "5433" 
- val jdbcDatabase = "yugabyte" 
- val table = "test"
- val jdbcUsername = "yugabyte" 
- val jdbcPassword = "Panwaudit2023" 
+//
+val test_Df = spark.read.jdbc(jdbcUrl, table="(select * from test) test_alias", connectionProperties)
 
-// Configure SSL properties,Use "require" for mandatory SSL 
-  val sslMode = "require" 
-  val sslRootCert = "/home/centos/spark3yb/root.crt"
-  val sslClientCert = "/home/centos/spark3yb/root.crt"
+//DataFrame API
+test_Df.select("id","ceil").groupBy("ceil").sum("id").limit(10).show
 
- // val sslClientKey = "path/to/client_key.pem" 
-// Create the JDBC URL with SSL options 
-  val jdbcUrl = "jdbc:postgresql://$jdbcHostname:$jdbcPort/$jdbcDatabase?user=$jdbcUsername&password=$jdbcPassword&sslmode=$sslMode&sslrootcert=$sslRootCert&sslcert=$sslClientCert"
-//&sslkey=$sslClientKey" 
-// Read data from the PostgreSQL database 
-val df = spark.read.format("jdbc").option("url", jdbcUrl).option("dbtable", table).load() 
-// Perform operations on the DataFrame 
-df.show() 
-// Stop the SparkSession spark.stop() 
+//Spark.SQL API
+test_Df.createOrReplaceTempView("test")
+spark.sql("select ceil, sum(id) from test group by ceil limit 10").show
+
+//Save
+val test_copy_Df = spark.read.jdbc(jdbcUrl, table="(select * from test_copy) test_copy_alias"connectionProperties)
+test_copy_Df.createOrReplaceTempView("test_copy")
+spark.table("test_copy").write.mode(SaveMode.Append).jdbc(jdbcUrl, "test", connectionProperties)
+
+
+
+
 
 } }
