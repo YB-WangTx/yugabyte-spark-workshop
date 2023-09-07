@@ -34,26 +34,38 @@ import org.apache.spark.sql.expressions.Window
 import com.datastax.spark.connector.cql.CassandraConnector
 import java.util.Properties
 
-val host = "10.36.2.198"
-val database = "yugabyte"
-val table = "test"
-val user = "yugabyte"
-val password = "Panwaudit2023!"
-val keyStore ="/home/centos/spark3yb/yb-keystore.jks"
 
-val jdbc_url = "jdbc:postgresql://10.36.2.198:5432/yugabyte"
+//val keyStore ="/home/centos/spark3yb/yb-keystore.jks"
 
-# Connection properties
-val properties = {
-    "user": user,
-    "password": password,
-    "driver": "org.postgresql.Driver",
-    "sslmode": "require",
-    "sslcert": pk8_client_cert_path,
-    "sslkey": client_key_path,
-    "sslrootcert": server_ca_path
-}
+//val jdbc_url = "jdbc:postgresql://10.36.2.198:5432/yugabyte"
+//libraryDependencies += "org.postgresql" % "postgresql" % "your_postgresql_version"
 
-# Read data from PostgreSQL into a DataFrame
-df = spark.read \
-    .jdbc(jdbc_url, table, properties=properties)
+object PostgresSSLConnection { 
+   def main(args: Array[String]): Unit = { 
+  // Create a SparkSession 
+ val spark = SparkSession.builder() 
+     .appName("PostgresSSLConnection") 
+     .getOrCreate() 
+
+// Configure PostgreSQL connection properties 
+ val jdbcHostname = "10.36.2.198"
+ val jdbcPort = "5432" 
+ val jdbcDatabase = "yugabyte" 
+ val table = "test"
+ val jdbcUsername = "yugabyte" 
+ val jdbcPassword = "Panwaudit2023" 
+
+// Configure SSL properties 
+  val sslMode = "require" 
+// Use "require" for mandatory SSL 
+  val sslRootCert = "path/to/root_cert.pem" 
+  val sslClientCert = "path/to/client_cert.pem" 
+  val sslClientKey = "path/to/client_key.pem" 
+// Create the JDBC URL with SSL options 
+  val jdbcUrl = s"jdbc:postgresql://$jdbcHostname:$jdbcPort/$jdbcDatabase?user=$jdbcUsername&password=$jdbcPassword&sslmode=$sslMode&sslrootcert=$sslRootCert&sslcert=$sslClientCert&sslkey=$sslClientKey" 
+// Read data from the PostgreSQL database val df = spark.read .format("jdbc") .option("url", jdbcUrl) .option("dbtable", table) .load() 
+// Perform operations on the DataFrame 
+df.show() 
+// Stop the SparkSession spark.stop() 
+
+} }
