@@ -25,7 +25,8 @@ import java.util.Properties
 import org.apache.spark.sql.SaveMode
 
 
-val jdbcUrl = s"jdbc:yugabytedb://localhost:5433/ysql_spark_shell"
+
+val jdbcUrl = s"jdbc:yugabytedb://10.36.2.198:5433/yugabyte"
 
 val connectionProperties = new Properties()
     connectionProperties.put("user", s"yugabyte")
@@ -53,6 +54,20 @@ test_copy_Df.createOrReplaceTempView("test_copy")
 spark.table("test_copy").write.mode(SaveMode.Append).jdbc(jdbcUrl, "test", connectionProperties)
 
 
+//parallelism
+val new_test_df = spark.read.format("jdbc")
+              .option("url", jdbcUrl)
+              .option("dbtable", "test")
+              .option("user", "yugabyte")
+              .option("password", "yugabyte")
+              .option("driver", "com.yugabyte.Driver")
+              .option("load-balance", "true")
+              .option("numPartitions", 5)
+              .option("partitionColumn", "ceil")
+              .option("lowerBound", 0)
+              .option("upperBound", 20)
+              .option("pushDownPredicate", true)
+              .option("pushDownAggregate", true).load
 
 
 
