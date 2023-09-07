@@ -50,13 +50,15 @@ val test_Df = spark.read.jdbc(jdbcUrl, table="(select * from test1) test_alias",
 test_Df.select("id","ceil").groupBy("ceil").sum("id").limit(10).show
 
 //Spark.SQL API
-test_Df.createOrReplaceTempView("test")
+test_Df.createOrReplaceTempView("test1")
 spark.sql("select ceil, sum(id) from test1 group by ceil limit 10").show
 
 //Save
-val test_copy_Df = spark.read.jdbc(jdbcUrl, table="(select * from test_copy) test_copy_alias"connectionProperties)
-test_copy_Df.createOrReplaceTempView("test_copy")
-spark.table("test_copy").write.mode(SaveMode.Append).jdbc(jdbcUrl, "test", connectionProperties)
+val test_copy_Df = spark.read.jdbc(jdbcUrl, table="(select * from test1_copy) test_copy_alias", connectionProperties)
+test_copy_Df.createOrReplaceTempView("test1_copy")
+
+//write to new table: ww
+spark.table("test1_copy").write.mode(SaveMode.Append).jdbc(jdbcUrl, "ww", connectionProperties)
 
 
 //parallelism, verify from https://localhost:4040.
