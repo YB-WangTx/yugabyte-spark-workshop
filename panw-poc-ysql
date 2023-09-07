@@ -29,7 +29,7 @@ import org.apache.spark.sql.SaveMode
 val jdbcUrl = s"jdbc:yugabytedb://10.36.2.198:5433/yugabyte"
 val host = "10.36.2.198"
 //val keyspace = "panw_test"
-//val table = "panw_audit_trail_demo"
+val table = "test1"
 val user = "yugabyte"
 val password = "Panwaudit2023!"
 
@@ -39,19 +39,19 @@ val connectionProperties = new Properties()
     connectionProperties.setProperty("Driver", "com.yugabyte.Driver")
 
 //
-val test_Df = spark.read.jdbc(jdbcUrl, "test", connectionProperties)
+val test_Df = spark.read.jdbc(jdbcUrl, "test1", connectionProperties)
 test_Df.show()
 test_Df.printSchema()
 
 //
-val test_Df = spark.read.jdbc(jdbcUrl, table="(select * from test) test_alias", connectionProperties)
+val test_Df = spark.read.jdbc(jdbcUrl, table="(select * from test1) test_alias", connectionProperties)
 
 //DataFrame API
 test_Df.select("id","ceil").groupBy("ceil").sum("id").limit(10).show
 
 //Spark.SQL API
 test_Df.createOrReplaceTempView("test")
-spark.sql("select ceil, sum(id) from test group by ceil limit 10").show
+spark.sql("select ceil, sum(id) from test1 group by ceil limit 10").show
 
 //Save
 val test_copy_Df = spark.read.jdbc(jdbcUrl, table="(select * from test_copy) test_copy_alias"connectionProperties)
@@ -62,7 +62,7 @@ spark.table("test_copy").write.mode(SaveMode.Append).jdbc(jdbcUrl, "test", conne
 //parallelism, verify from https://localhost:4040.
 val new_test_df = spark.read.format("jdbc")
               .option("url", jdbcUrl)
-              .option("dbtable", "test")
+              .option("dbtable", "test1")
               .option("user", user)
               .option("password", password)
               .option("driver", "com.yugabyte.Driver")
@@ -74,7 +74,7 @@ val new_test_df = spark.read.format("jdbc")
               .option("pushDownPredicate", true)
               .option("pushDownAggregate", true).load
 
-new_test_df.createOrReplaceTempView("test")
+new_test_df.createOrReplaceTempView("test1")
 spark.sql("select sum(ceil) from test where id > 50000").show
 
 
