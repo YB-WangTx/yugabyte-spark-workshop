@@ -1,0 +1,18 @@
+
+
+val jdbc_url = "jdbc:postgresql://10.36.2.198:5432/yugabyte"
+
+# Connection properties
+properties = {
+    "user": user,
+    "password": password,
+    "driver": "org.postgresql.Driver",
+    "sslmode": "require",
+    "sslcert": pk8_client_cert_path,
+    "sslkey": client_key_path,
+    "sslrootcert": server_ca_path
+}
+
+# Read data from PostgreSQL into a DataFrame
+df = spark.read \
+    .jdbc(jdbc_url, "your_table_name", properties=properties)
