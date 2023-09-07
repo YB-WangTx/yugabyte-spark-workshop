@@ -10,12 +10,16 @@ password: Panwaudit2023!
 keyspace: panw_test
 table: panw_audit_trail_demo
 
---Universe: wwang-testing
---login to ycql
-./master/bin/ycqlsh `hostname -i`  -u 'cassandra'
-password: Yugabyte12#
 
+
+--app server
 ssh -i "kp-CANNON-aws.pem" centos@44.214.44.45
+
+--Create a keystore to access ssl enabled YCQL
+keytool -keystore yb-keystore.jks -storetype 'jks' -importcert -file ~/yugabyte-client-tls-config/ca.crt -keypass 'ybcloud' 
+       -storepass 'ybcloud' -alias ~/home/centos/spark3yb/root_crt  -noprompt
+
+--start Spark
 cd /home/centos/spark-3.4.1-bin-hadoop3
 ./bin/spark-shell --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtension --packages com.yugabyte.spark:spark-cassandra-connector_2.12:3.0-yb-8
 
