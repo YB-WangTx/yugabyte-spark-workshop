@@ -59,7 +59,7 @@ test_copy_Df.createOrReplaceTempView("test_copy")
 spark.table("test_copy").write.mode(SaveMode.Append).jdbc(jdbcUrl, "test", connectionProperties)
 
 
-//parallelism
+//parallelism, verify from https://localhost:4040.
 val new_test_df = spark.read.format("jdbc")
               .option("url", jdbcUrl)
               .option("dbtable", "test")
@@ -73,6 +73,9 @@ val new_test_df = spark.read.format("jdbc")
               .option("upperBound", 20)
               .option("pushDownPredicate", true)
               .option("pushDownAggregate", true).load
+
+new_test_df.createOrReplaceTempView("test")
+spark.sql("select sum(ceil) from test where id > 50000").show
 
 
 } }
