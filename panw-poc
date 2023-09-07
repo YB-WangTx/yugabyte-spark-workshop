@@ -38,6 +38,7 @@ import com.datastax.spark.connector.cql.CassandraConnectorConf
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.expressions.Window
 import com.datastax.spark.connector.cql.CassandraConnector
+import java.util.Properties
 
 val host = "10.36.2.198"
 val keyspace = "panw_test"
