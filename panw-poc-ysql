@@ -36,7 +36,7 @@ import java.util.Properties
 
 //val keyStore ="/home/centos/spark3yb/yb-keystore.jks"
 
-//val jdbc_url = "jdbc:postgresql://10.36.2.198:5432/yugabyte"
+//val jdbc_url = "jdbc:postgresql://10.36.2.198:5433/yugabyte"
 //libraryDependencies += "org.postgresql" % "postgresql" % "your_postgresql_version"
 
 object PostgresSSLConnection { 
