@@ -55,7 +55,7 @@ val conf = new SparkConf()
     .set("spark.sql.catalog.ybcatalog", "com.datastax.spark.connector.datasource.CassandraCatalog")
     .set("spark.sql.extensions", "com.datastax.spark.connector.CassandraSparkExtensions")
 
-//Spark session
+//Spark session to YCQL
 
  val spark = SparkSession.builder()
              .config(conf)
