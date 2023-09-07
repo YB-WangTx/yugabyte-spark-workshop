@@ -63,7 +63,7 @@ spark.table("test1_copy").write.mode(SaveMode.Append).jdbc(jdbcUrl, "ww", connec
 
 //parallelism, verify from https://localhost:4040.
 val new_test_df = spark.read.format("jdbc")
-              .option("url", jdbcUrl)
+              .option("url", "jdbc:yugabytedb://10.36.2.198:5433/yugabyte")
               .option("dbtable", "test1")
               .option("user", user)
               .option("password", password)
