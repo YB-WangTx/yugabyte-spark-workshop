@@ -98,6 +98,9 @@ df_sel2.show()
 df_sel2.explain
 
 
+//----------EOF-----------------------------------------------------------------------------------------------------------------------------------
+
+
 //Performing ETL : Window function
 //row_number()
 val windowSpec  = Window.partitionBy("department_id").orderBy("salary")
