@@ -10,8 +10,6 @@ password: Panwaudit2023!
 keyspace: panw_test
 table: panw_audit_trail_demo
 
-
-
 --app server
 ssh -i "kp-CANNON-aws.pem" centos@44.214.44.45
 
