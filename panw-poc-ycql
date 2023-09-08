@@ -91,6 +91,13 @@ val resultDF = spark.sql("SELECT * FROM json_data WHERE tenant_id ='123505328935
 
 resultDF.show(fasle)
 
+//query data from YCQL
+val query = "SELECT eventuuid, get_json_object(data, '$.awsRegion') from ybcatalog.panw_test.panw_audit_trail_demo where tenant_id ='123505328935'";
+val df_sel2 = spark.sql(query)
+df_sel2.show()
+df_sel2.explain
+
+
 //Performing ETL : Window function
 //row_number()
 val windowSpec  = Window.partitionBy("department_id").orderBy("salary")
@@ -112,6 +119,8 @@ val sqlDF = spark.sql("SELECT * FROM ybcatalog.test.employees_json_copy").show(f
 //Native support of Json:
 val df = spark.sql("SELECT * FROM ybcatalog.test.employees_json WHERE get_json_object(phone, '$.phone') = 1200");
 df.show
+
+//INSERT INTO employees_json(department_id, employee_id, dept_name, salary, phone) VALUES (1, 1, 'Sales', 10000,  '{"code":"+1","phone":7462505400}');
 
 //Using JSONB Column Pruning
 val query = "SELECT department_id, employee_id, get_json_object(phone, '$.code') as code FROM ybcatalog.test.employees_json WHERE get_json_string(phone, '$.key(1)') = '1400' order by department_id limit 2";
