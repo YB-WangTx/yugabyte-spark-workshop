@@ -81,3 +81,6 @@ spark.sql("select sum(ceil) from test where id > 50000").show
 
 
 } }
+
+
+https://github.com/NOWSHAD76/Spark/blob/main/Spark_copy_cmd/src/main/scala/Spark_copy.scala
