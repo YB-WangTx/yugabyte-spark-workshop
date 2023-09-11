@@ -72,6 +72,11 @@ val conf = new SparkConf()
 //Spark session
 val spark = SparkSession.builder().config(conf).config("spark.cassandra.connection.host", host).config("spark.cassandra.connection.port", "9042").config("spark.cassandra.connection.ssl.clientAuth.enabled", true).config("spark.cassandra.auth.username", user).config("spark.cassandra.auth.password", password).config("spark.cassandra.connection.ssl.enabled", true).config("spark.cassandra.connection.ssl.trustStore.type", "jks").config("spark.cassandra.connection.ssl.trustStore.path", keyStore).config("spark.cassandra.connection.ssl.trustStore.password", "ybcloud").withExtensions(new CassandraSparkExtensions).getOrCreate()
 
+//performance adjustments
+spark.cassandra.input.split.size
+//Default = 100000. Approximate number of rows in a single Spark partition. 
+spark.cassandra.input.fetch.size_in_rows 
+//Default = 1000. Number of rows being fetched per round-trip to the database.
 
 //List namespace
 spark.sql("SHOW NAMESPACES FROM ybcatalog").show
