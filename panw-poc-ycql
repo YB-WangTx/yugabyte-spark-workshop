@@ -107,6 +107,8 @@ resultDF.show(fasle)
 
 //query data from YCQL
 val query = "SELECT eventuuid, get_json_object(data, '$.awsRegion') from ybcatalog.panw_test.panw_audit_trail_demo where tenant_id ='123505328935'";
+//select * from panw_audit_trail_demo where tenant_id='745846189716' and evt_timestamp between '2023-06-27 12:00:00.0000' and '2023-06-28 12:00:00.00000'
+
 val df_sel2 = spark.sql(query)
 df_sel2.show()
 df_sel2.explain
