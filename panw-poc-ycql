@@ -78,6 +78,9 @@ spark.cassandra.input.split.size
 spark.cassandra.input.fetch.size_in_rows 
 //Default = 1000. Number of rows being fetched per round-trip to the database.
 
+//df = sqlContext.sql(query)
+//spark.time(df.show())
+
 //List namespace
 spark.sql("SHOW NAMESPACES FROM ybcatalog").show
 
