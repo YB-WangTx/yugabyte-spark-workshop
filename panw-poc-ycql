@@ -102,6 +102,11 @@ val df_sel2 = spark.sql(query)
 df_sel2.show()
 df_sel2.explain
 
+//pass paremeter
+//val param = 100
+
+//sqlContext.sql(s"""SELECT * FROM table1 where param=$param""")
+
 
 //----------EOF-----------------------------------------------------------------------------------------------------------------------------------
 
