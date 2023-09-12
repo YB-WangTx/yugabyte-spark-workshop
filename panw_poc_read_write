@@ -50,7 +50,7 @@ val conf = new SparkConf()
 //Spark session
 val spark = SparkSession.builder().config(conf).config("spark.cassandra.connection.host", host).config("spark.cassandra.connection.port", "9042").config("spark.cassandra.connection.ssl.clientAuth.enabled", true).config("spark.cassandra.auth.username", user).config("spark.cassandra.auth.password", password).config("spark.cassandra.connection.ssl.enabled", true).config("spark.cassandra.connection.ssl.trustStore.type", "jks").config("spark.cassandra.connection.ssl.trustStore.path", keyStore).config("spark.cassandra.connection.ssl.trustStore.password", "ybcloud").withExtensions(new CassandraSparkExtensions).getOrCreate()
 
-val query = "SELECT tenant_id, get_json_object(data, '$.awsRegion') as awsRgion, get_json_object(data, '$.eventName') as eventName from ybcatalog.panw_test.panw_audit_trail_demo where evt_timestamp between '2023-06-27 12:00:00.0000' and '2023-06-28 12:00:00.00000'";
+val query = "SELECT tenant_id, get_json_object(data, '$.awsRegion') as awsRegion, get_json_object(data, '$.eventName') as eventName from ybcatalog.panw_test.panw_audit_trail_demo where evt_timestamp between '2023-06-27 12:00:00.0000' and '2023-06-28 12:00:00.00000'";
 val df_sel1 = spark.time(spark.sql(query))
 spark.time(df_sel1.show())
 
