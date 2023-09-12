@@ -1,1 +1,3 @@
+cd /home/centos/spark-3.4.1-bin-hadoop3
+./bin/spark-shell --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtension --packages com.yugabyte.spark:spark-cassandra-connector_2.12:3.0-yb-8
 
