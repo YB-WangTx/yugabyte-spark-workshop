@@ -116,6 +116,8 @@ val df_sel2 = spark.sql(query)
 df_sel2.show()
 df_sel2.explain
 
+df_sel2.groupBy("tenant_id","awsRgion","eventName").count().show(false)
+
 //pass paremeter
 //val param = 100
 
