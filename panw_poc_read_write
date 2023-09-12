@@ -1,5 +1,5 @@
 cd /home/centos/spark-3.4.1-bin-hadoop3
-./bin/spark-shell --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtension --packages com.yugabyte.spark:spark-cassandra-connector_2.12:3.0-yb-8 --packages com.yugabyte:jdbc-yugabytedb:42.3.0
+./bin/spark-shell --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtension --packages com.yugabyte.spark:spark-cassandra-connector_2.12:3.0-yb-8
 
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.SparkSession
@@ -58,6 +58,9 @@ spark.time(df_sel1.show())
 df_sel1.groupBy("tenant_id","awsRgion","eventName").count().show(false)
 
 //proepare to write out to YSQL
+
+:require /home/centos/jdbc-yugabytedb-42.3.5-yb-3.jar
+
 val jdbcUrl = s"jdbc:yugabytedb://10.36.2.198:5433/yugabyte"
 
 val connectionProperties = new Properties()
