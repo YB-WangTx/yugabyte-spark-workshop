@@ -60,10 +60,20 @@ df_sel1.groupBy("tenant_id","awsRgion","eventName").count().show(false)
 //proepare to write out to YSQL
 val jdbcUrl = s"jdbc:yugabytedb://10.36.2.198:5433/yugabyte"
 
+val connectionProperties = new Properties()
+    connectionProperties.put("user", s"yugabyte")
+    connectionProperties.put("password", s"Panwaudit2023!")
+    connectionProperties.setProperty("Driver", "com.yugabyte.Driver")
+
 //convert DF:df_sel1 to temp table: test1
 val test_Df = df_sel1.createOrReplaceTempView("test1")
 //write out
 spark.table("test1").write.mode(SaveMode.Append).jdbc(jdbcUrl, "ww1", connectionProperties)
+
+//verify
+val test_Df = spark.read.jdbc(jdbcUrl, "ww1", connectionProperties)
+test_Df.show()
+test_Df.printSchema()
 
 
 
