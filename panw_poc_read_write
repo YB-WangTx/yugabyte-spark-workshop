@@ -50,3 +50,20 @@ val conf = new SparkConf()
 //Spark session
 val spark = SparkSession.builder().config(conf).config("spark.cassandra.connection.host", host).config("spark.cassandra.connection.port", "9042").config("spark.cassandra.connection.ssl.clientAuth.enabled", true).config("spark.cassandra.auth.username", user).config("spark.cassandra.auth.password", password).config("spark.cassandra.connection.ssl.enabled", true).config("spark.cassandra.connection.ssl.trustStore.type", "jks").config("spark.cassandra.connection.ssl.trustStore.path", keyStore).config("spark.cassandra.connection.ssl.trustStore.password", "ybcloud").withExtensions(new CassandraSparkExtensions).getOrCreate()
 
+val query = "SELECT tenant_id, get_json_object(data, '$.awsRegion') as awsRgion, get_json_object(data, '$.eventName') as eventName from ybcatalog.panw_test.panw_audit_trail_demo where evt_timestamp between '2023-06-27 12:00:00.0000' and '2023-06-28 12:00:00.00000'";
+val df_sel1 = spark.time(spark.sql(query))
+spark.time(df_sel1.show())
+
+//group by
+df_sel1.groupBy("tenant_id","awsRgion","eventName").count().show(false)
+
+//proepare to write out to YSQL
+val jdbcUrl = s"jdbc:yugabytedb://10.36.2.198:5433/yugabyte"
+
+//convert DF:df_sel1 to temp table: test1
+val test_Df = df_sel1.createOrReplaceTempView("test1")
+//write out
+spark.table("test1").write.mode(SaveMode.Append).jdbc(jdbcUrl, "ww1", connectionProperties)
+
+
+
