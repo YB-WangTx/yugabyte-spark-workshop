@@ -55,7 +55,7 @@ val df_sel1 = spark.time(spark.sql(query))
 spark.time(df_sel1.show())
 
 //group by
-df_sel1.groupBy("tenant_id","awsRgion","eventName").count().show(false)
+df_sel1.groupBy("tenant_id","awsRegion","eventName").count().show(false)
 
 //proepare to write out to YSQL
 
