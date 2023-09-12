@@ -27,7 +27,7 @@ import org.apache.spark.sql.SaveMode
 spark.sparkContext.setLogLevel("ERROR")
 
 val jdbcUrl = s"jdbc:yugabytedb://10.36.2.198:5433/yugabyte"
-val host = "10.36.2.198"
+val host = "10.36.3.199"
 //val keyspace = "panw_test"
 val table = "test1"
 val user = "yugabyte"
