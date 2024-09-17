@@ -61,7 +61,6 @@ Diagram
     
 - Build an application
  - import libraires
-   //import libraries
    import org.apache.spark.{SparkConf, SparkContext}
    import org.apache.spark.sql.SparkSession
    import org.apache.spark.sql.Row
